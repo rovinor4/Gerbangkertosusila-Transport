@@ -7,4 +7,6 @@ add_executable(GerbangkertosusilaTransport main.cpp
         common.h
         transport.cpp
         transport.h
+        region.cpp
+        region.h
 )

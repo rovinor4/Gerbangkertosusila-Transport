@@ -7,14 +7,14 @@ struct TransportInfo {
     int id;
     string name;
     int price;
-    int opStart;   // 0..23
-    int opEnd;     // 0..23
+    int opStart;
+    int opEnd;
 };
 
 struct TransportNode {
     TransportInfo info;
-    TransportNode* prev;
-    TransportNode* next;
+    TransportNode* prev{};
+    TransportNode* next{};
 };
 
 struct TransportList {
