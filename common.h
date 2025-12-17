@@ -9,4 +9,12 @@
 
 using namespace std;
 
+
+static void clearInput();
+static void pauseEnter();
+static void header();
+static void inputInt();
+static void inputLine();
+
+
 #endif

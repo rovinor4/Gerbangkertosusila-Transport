@@ -9,4 +9,7 @@ add_executable(GerbangkertosusilaTransport main.cpp
         transport.h
         region.cpp
         region.h
+        common.cpp
+        relation.cpp
+        relation.h
 )
