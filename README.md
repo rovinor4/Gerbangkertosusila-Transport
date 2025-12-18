@@ -1,10 +1,16 @@
 # Gerbangkertosusila Transport
 
+<img src="AboutImage.png" style="border-radius: 20px;">
+
 Gerbangkertosusila Transport adalah project C++ berbasis Abstract Data Type (ADT) yang mengimplementasikan multi linked list dengan relasi M ke N.
 Project ini memodelkan hubungan antara alat transportasi darat dan daerah pada wilayah Gerbangkertosusila.
 
 ---
+## Kontribusi
 
+<p style="font-size: 15px;">Rovino Ramadhani (103072400031)</p>
+
+---
 ## 📌 Project Information
 
 Course : Struktur Data
