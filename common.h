@@ -9,5 +9,9 @@
 
 using namespace std;
 
-
+void clearInput();
+void pauseEnter();
+void header(const string &title);
+int inputInt(const string &label);
+string inputLine(const string &label);
 #endif

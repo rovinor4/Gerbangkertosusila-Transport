@@ -3,49 +3,12 @@
 #include "region.h"
 #include "relation.h"
 
-
-static void clearInput() {
-    cin.clear();
-    cin.ignore(numeric_limits<streamsize>::max(), '\n');
-}
-
-static void pauseEnter() {
-    cout << "\nPress ENTER to continue...";
-    cin.ignore(numeric_limits<streamsize>::max(), '\n');
-}
-
-static void header(const string& title) {
-    cout << "\n" << string(25,'=') << endl;
-    cout << title;
-    cout << "\n" << string(25,'=') << endl;
-}
-
-static int inputInt(const string& label) {
-    int x;
-    while (true) {
-        cout << label;
-        if (cin >> x) {
-            clearInput();
-            return x;
-        }
-        clearInput();
-        cout << "Invalid input. Try again.\n";
-    }
-}
-
-static string inputLine(const string& label) {
-    string s;
-    cout << label;
-    getline(cin, s);
-    return s;
-}
-
-static void seedDummyData(TransportList& transports, RegionList& regions) {
+void seedDummyData(TransportList &transports, RegionList &regions)
+{
     insertFirstTransport(transports, createTransportNode(101, "Bus Antar Kota", 15000, 5, 22));
     insertFirstTransport(transports, createTransportNode(102, "Kereta Komuter", 8000, 4, 23));
     insertFirstTransport(transports, createTransportNode(103, "Mobil Shuttle", 25000, 6, 21));
     insertFirstTransport(transports, createTransportNode(104, "Bus Kota", 5000, 5, 21));
-
 
     insertLastRegion(regions, createRegionNode(201, "Surabaya", "Gubeng Station, Bungurasih Terminal"));
     insertLastRegion(regions, createRegionNode(202, "Sidoarjo", "Sidoarjo Station, Larangan Terminal"));
@@ -53,16 +16,16 @@ static void seedDummyData(TransportList& transports, RegionList& regions) {
     insertLastRegion(regions, createRegionNode(204, "Mojokerto", "Mojokerto Station, Mojokerto Terminal"));
     insertLastRegion(regions, createRegionNode(205, "Lamongan", "Lamongan Station, Lamongan Terminal"));
 
-    RegionNode* surabaya = findRegionById(regions, 201);
-    RegionNode* sidoarjo = findRegionById(regions, 202);
-    RegionNode* gresik = findRegionById(regions, 203);
-    RegionNode* mojokerto = findRegionById(regions, 204);
-    RegionNode* lamongan = findRegionById(regions, 205);
+    RegionNode *surabaya = findRegionById(regions, 201);
+    RegionNode *sidoarjo = findRegionById(regions, 202);
+    RegionNode *gresik = findRegionById(regions, 203);
+    RegionNode *mojokerto = findRegionById(regions, 204);
+    RegionNode *lamongan = findRegionById(regions, 205);
 
-    TransportNode* bus = findTransportById(transports, 101);
-    TransportNode* train = findTransportById(transports, 102);
-    TransportNode* van = findTransportById(transports, 103);
-    TransportNode* city = findTransportById(transports, 104);
+    TransportNode *bus = findTransportById(transports, 101);
+    TransportNode *train = findTransportById(transports, 102);
+    TransportNode *van = findTransportById(transports, 103);
+    TransportNode *city = findTransportById(transports, 104);
 
     addRelation(surabaya, bus);
     addRelation(surabaya, train);
@@ -83,225 +46,314 @@ static void seedDummyData(TransportList& transports, RegionList& regions) {
     addRelation(lamongan, train);
 }
 
-static void featureAddTransport(TransportList& transports) {
-    header("ADD TRANSPORT");
+void featureAddTransport(TransportList &transports)
+{
+    header("TAMBAH ANGKUTAN");
 
     int id = inputInt("ID: ");
-    string name = inputLine("Name: ");
-    int price = inputInt("Price: ");
-    int startH = inputInt("Operating start hour (0..23): ");
-    int endH = inputInt("Operating end hour (0..23): ");
+    string name = inputLine("Nama: ");
+    int price = inputInt("Tarif: ");
+    int startH = inputInt("Jam mulai operasional (0..23): ");
+    int endH = inputInt("Jam akhir operasional (0..23): ");
 
-    if (!validateTransportFields(id, name, price, startH, endH)) {
-        cout << "Invalid transport fields.\n";
+    if (!validateTransportFields(id, name, price, startH, endH))
+    {
+        cout << "Data angkutan tidak valid.\n";
         return;
     }
 
-    if (findTransportById(transports, id) != nullptr) {
-        cout << "ID already exists.\n";
+    if (findTransportById(transports, id) != nullptr)
+    {
+        cout << "ID sudah terdaftar.\n";
         return;
     }
 
     insertFirstTransport(transports, createTransportNode(id, name, price, startH, endH));
-    cout << "Transport added.\n";
+    cout << "Angkutan berhasil ditambahkan.\n";
 }
 
-static void featureDeleteTransport(TransportList& transports, RegionList& regions) {
-    header("DELETE FIRST TRANSPORT");
+void featureDeleteTransport(TransportList &transports, RegionList &regions)
+{
+    header("HAPUS ANGKUTAN PERTAMA");
 
     int deletedId = -1;
-    if (!deleteFirstTransport(transports, deletedId)) {
-        cout << "Transport list is empty.\n";
+    if (!deleteFirstTransport(transports, deletedId))
+    {
+        cout << "Data angkutan kosong.\n";
         return;
     }
 
     removeAllRelationsToTransport(regions, deletedId);
-    cout << "Deleted transport ID: " << deletedId << "\n";
-    cout << "All related connections removed.\n";
+    cout << "Angkutan dengan ID " << deletedId << " berhasil dihapus.\n";
+    cout << "Seluruh relasi terkait telah dihapus.\n";
 }
 
-static void featureAddRegion(RegionList& regions) {
-    header("ADD REGION");
+void featureAddRegion(RegionList &regions)
+{
+    header("TAMBAH DAERAH");
 
     int id = inputInt("ID: ");
-    string name = inputLine("Name: ");
-    string spots = inputLine("Main spots: ");
+    string name = inputLine("Nama: ");
+    string spots = inputLine("Tempat utama: ");
 
-    if (!validateRegionFields(id, name, spots)) {
-        cout << "Invalid region fields.\n";
+    if (!validateRegionFields(id, name, spots))
+    {
+        cout << "Data daerah tidak valid.\n";
         return;
     }
 
-    if (findRegionById(regions, id) != nullptr) {
-        cout << "ID already exists.\n";
+    if (findRegionById(regions, id) != nullptr)
+    {
+        cout << "ID sudah terdaftar.\n";
         return;
     }
 
     insertLastRegion(regions, createRegionNode(id, name, spots));
-    cout << "Region added.\n";
+    cout << "Daerah berhasil ditambahkan.\n";
 }
 
-static void featureDeleteRegion(RegionList& regions) {
-    header("DELETE LAST REGION");
+void featureDeleteRegion(RegionList &regions)
+{
+    header("HAPUS DAERAH TERAKHIR");
 
     int deletedId = -1;
-    if (!deleteLastRegion(regions, deletedId)) {
-        cout << "Region list is empty.\n";
+    if (!deleteLastRegion(regions, deletedId))
+    {
+        cout << "Data daerah kosong.\n";
         return;
     }
-    cout << "Deleted region ID: " << deletedId << "\n";
+    cout << "Daerah dengan ID " << deletedId << " berhasil dihapus.\n";
 }
 
-static void featureConnect(TransportList& transports, RegionList& regions) {
-    header("CONNECT REGION AND TRANSPORT");
+void featureConnect(TransportList &transports, RegionList &regions)
+{
+    header("HUBUNGKAN DAERAH DAN ANGKUTAN");
 
-    int regionId = inputInt("Region ID: ");
-    int transportId = inputInt("Transport ID: ");
+    int regionId = inputInt("ID Daerah: ");
+    int transportId = inputInt("ID Angkutan: ");
 
-    RegionNode* r = findRegionById(regions, regionId);
-    TransportNode* t = findTransportById(transports, transportId);
+    RegionNode *r = findRegionById(regions, regionId);
+    TransportNode *t = findTransportById(transports, transportId);
 
-    if (r == nullptr) {
-        cout << "Region not found.\n";
+    if (r == nullptr)
+    {
+        cout << "Daerah tidak ditemukan.\n";
         return;
     }
-    if (t == nullptr) {
-        cout << "Transport not found.\n";
+    if (t == nullptr)
+    {
+        cout << "Angkutan tidak ditemukan.\n";
         return;
     }
 
-    if (!addRelation(r, t)) {
-        cout << "Connection failed. Possibly duplicate.\n";
+    if (!addRelation(r, t))
+    {
+        cout << "Gagal menghubungkan. Mungkin sudah terhubung.\n";
         return;
     }
 
-    cout << "Connected.\n";
+    cout << "Berhasil dihubungkan.\n";
 }
 
-static void featureDisconnect(RegionList& regions) {
-    header("DISCONNECT REGION AND TRANSPORT");
+void featureDisconnect(RegionList &regions)
+{
+    header("PUTUSKAN HUBUNGAN DAERAH DAN ANGKUTAN");
 
-    int regionId = inputInt("Region ID: ");
-    int transportId = inputInt("Transport ID: ");
+    int regionId = inputInt("ID Daerah: ");
+    int transportId = inputInt("ID Angkutan: ");
 
-    RegionNode* r = findRegionById(regions, regionId);
-    if (r == nullptr) {
-        cout << "Region not found.\n";
+    RegionNode *r = findRegionById(regions, regionId);
+    if (r == nullptr)
+    {
+        cout << "Daerah tidak ditemukan.\n";
         return;
     }
 
-    if (!removeRelation(r, transportId)) {
-        cout << "Connection not found.\n";
+    if (!removeRelation(r, transportId))
+    {
+        cout << "Relasi tidak ditemukan.\n";
         return;
     }
 
-    cout << "Disconnected.\n";
+    cout << "Relasi berhasil diputuskan.\n";
 }
 
-static void featureShowEasyHard(const RegionList& regions) {
-    header("EASIEST AND HARDEST REGION");
+void featureShowEasyHard(const RegionList &regions)
+{
+    header("DAERAH PALING MUDAH & SULIT DIAKSES");
 
-    if (isRegionEmpty(regions)) {
-        cout << "No region data.\n";
+    if (isRegionEmpty(regions))
+    {
+        cout << "Data daerah kosong.\n";
         return;
     }
 
-    RegionNode* easiest = nullptr;
-    RegionNode* hardest = nullptr;
+    RegionNode *easiest = nullptr;
+    RegionNode *hardest = nullptr;
 
-    RegionNode* cur = regions.head;
-    while (cur != nullptr) {
-        if (easiest == nullptr || countRelations(cur) > countRelations(easiest)) easiest = cur;
-        if (hardest == nullptr || countRelations(cur) < countRelations(hardest)) hardest = cur;
+    RegionNode *cur = regions.head;
+    while (cur != nullptr)
+    {
+        if (easiest == nullptr || countRelations(cur) > countRelations(easiest))
+            easiest = cur;
+        if (hardest == nullptr || countRelations(cur) < countRelations(hardest))
+            hardest = cur;
         cur = cur->next;
     }
 
-    cout << "Easiest region: " << easiest->info.name << " (connections: " << countRelations(easiest) << ")\n";
-    cout << "Hardest region: " << hardest->info.name << " (connections: " << countRelations(hardest) << ")\n";
+    cout << "Daerah paling mudah diakses: " << easiest->info.name << " (jumlah relasi: " << countRelations(easiest) << ")\n";
+    cout << "Daerah paling sulit diakses: " << hardest->info.name << " (jumlah relasi: " << countRelations(hardest) << ")\n";
 }
 
-int main() {
-    TransportList transports;
-    RegionList regions;
+int main()
+{
+    TransportList transports{};
+    RegionList regions{};
 
     initTransportList(transports);
     initRegionList(regions);
 
     seedDummyData(transports, regions);
 
-    while (true) {
-        header("MAIN MENU");
-        cout << "1. Show all transport\n";
-        cout << "2. Show all regions\n";
-        cout << "3. Add transport\n";
-        cout << "4. Delete first transport\n";
-        cout << "5. Add region\n";
-        cout << "6. Delete last region\n";
-        cout << "7. Connect region and transport\n";
-        cout << "8. Disconnect region and transport\n";
-        cout << "9. Show regions with transports\n";
-        cout << "10. Show transports with regions\n";
-        cout << "11. Easiest and hardest region\n";
-        cout << "0. Exit\n";
+    while (true)
+    {
+        header("MENU UTAMA");
+        cout << "1. Tambah data alat angkutan\n";
+        cout << "2. Tambah data daerah\n";
+        cout << "3. Hubungkan alat angkutan dan daerah\n";
+        cout << "4. Hapus data alat angkutan tertentu\n";
+        cout << "5. Hapus data daerah tertentu\n";
+        cout << "6. Tampilkan semua alat angkutan beserta daerah yang bisa dikunjungi\n";
+        cout << "7. Tampilkan semua daerah yang bisa dilalui alat angkutan tertentu\n";
+        cout << "8. Tampilkan semua alat angkutan yang bisa mengunjungi daerah tertentu\n";
+        cout << "9. Tampilkan daerah paling mudah & paling sulit sarana transportasinya\n";
+        cout << "0. Keluar\n";
 
-        int choice = inputInt("Choose: ");
+        int choice = inputInt("Pilih menu: ");
 
-        if (choice == 0) {
-            header("EXIT");
-            cout << "Good luck.\n";
+        switch (choice)
+        {
+        case 0:
+            header("KELUAR");
+            cout << "Semoga sukses.\n";
             break;
-        }
-
-        if (choice == 1) {
-            header("SHOW ALL TRANSPORT");
-            showAllTransport(transports);
-            pauseEnter();
-        } else if (choice == 2) {
-            header("SHOW ALL REGIONS");
-            showAllRegions(regions);
-            pauseEnter();
-        } else if (choice == 3) {
+        case 1:
             featureAddTransport(transports);
             pauseEnter();
-        } else if (choice == 4) {
-            featureDeleteTransport(transports, regions);
-            pauseEnter();
-        } else if (choice == 5) {
+            break;
+        case 2:
             featureAddRegion(regions);
             pauseEnter();
-        } else if (choice == 6) {
-            featureDeleteRegion(regions);
-            pauseEnter();
-        } else if (choice == 7) {
+            break;
+        case 3:
             featureConnect(transports, regions);
             pauseEnter();
-        } else if (choice == 8) {
-            featureDisconnect(regions);
+            break;
+        case 4:
+        {
+            header("HAPUS ANGKUTAN BERDASARKAN ID");
+            int id = inputInt("Masukkan ID angkutan yang akan dihapus: ");
+            TransportNode *t = findTransportById(transports, id);
+            if (!t)
+            {
+                cout << "Angkutan tidak ditemukan.\n";
+            }
+            else
+            {
+                TransportNode *curr = transports.head;
+                TransportNode *prev = nullptr;
+                while (curr && curr->info.id != id)
+                {
+                    prev = curr;
+                    curr = curr->next;
+                }
+                if (curr)
+                {
+                    if (prev)
+                        prev->next = curr->next;
+                    else
+                        transports.head = curr->next;
+                    if (curr == transports.tail)
+                        transports.tail = prev;
+                    removeAllRelationsToTransport(regions, id);
+                    delete curr;
+                    cout << "Angkutan berhasil dihapus.\n";
+                }
+            }
             pauseEnter();
-        } else if (choice == 9) {
-            header("REGIONS WITH TRANSPORTS");
-            showAllRegionsWithTransports(regions);
+            break;
+        }
+        case 5:
+        {
+            header("HAPUS DAERAH BERDASARKAN ID");
+            int id = inputInt("Masukkan ID daerah yang akan dihapus: ");
+            RegionNode *prev = nullptr;
+            RegionNode *curr = regions.head;
+            while (curr && curr->info.id != id)
+            {
+                prev = curr;
+                curr = curr->next;
+            }
+            if (!curr)
+            {
+                cout << "Daerah tidak ditemukan.\n";
+            }
+            else
+            {
+                if (prev)
+                    prev->next = curr->next;
+                else
+                    regions.head = curr->next;
+                freeRelations(curr);
+                delete curr;
+                cout << "Daerah berhasil dihapus.\n";
+            }
             pauseEnter();
-        } else if (choice == 10) {
-            header("TRANSPORTS WITH REGIONS");
+            break;
+        }
+        case 6:
+            header("SEMUA ANGKUTAN BESERTA DAERAH YANG BISA DIKUNJUNGI");
             showAllTransportsWithRegions(transports, regions);
             pauseEnter();
-        } else if (choice == 11) {
+            break;
+        case 7:
+            header("DAERAH YANG BISA DILALUI ANGKUTAN TERTENTU");
+            {
+                int id = inputInt("Masukkan ID angkutan: ");
+                TransportNode *t = findTransportById(transports, id);
+                showTransportWithRegions(t, regions);
+            }
+            pauseEnter();
+            break;
+        case 8:
+            header("ANGKUTAN YANG BISA MENGUNJUNGI DAERAH TERTENTU");
+            {
+                int id = inputInt("Masukkan ID daerah: ");
+                RegionNode *r = findRegionById(regions, id);
+                showRegionWithTransports(r);
+            }
+            pauseEnter();
+            break;
+        case 9:
             featureShowEasyHard(regions);
             pauseEnter();
-        } else {
-            cout << "Invalid menu.\n";
+            break;
+        default:
+            cout << "Menu tidak valid.\n";
             pauseEnter();
+            break;
         }
     }
 
-    while (!isTransportEmpty(transports)) {
+    while (!isTransportEmpty(transports))
+    {
         int deletedId = -1;
         deleteFirstTransport(transports, deletedId);
         removeAllRelationsToTransport(regions, deletedId);
     }
 
-    while (!isRegionEmpty(regions)) {
+    while (!isRegionEmpty(regions))
+    {
         int deletedId = -1;
         deleteLastRegion(regions, deletedId);
     }
