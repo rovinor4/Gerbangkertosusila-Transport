@@ -236,7 +236,20 @@ int main()
         case 0:
             header("KELUAR");
             cout << "Semoga sukses.\n";
-            break;
+            while (!isTransportEmpty(transports))
+            {
+                int deletedId = -1;
+                deleteFirstTransport(transports, deletedId);
+                removeAllRelationsToTransport(regions, deletedId);
+            }
+
+            while (!isRegionEmpty(regions))
+            {
+                int deletedId = -1;
+                deleteLastRegion(regions, deletedId);
+            }
+
+            return 0;
         case 1:
             featureAddTransport(transports);
             pauseEnter();
@@ -344,19 +357,4 @@ int main()
             break;
         }
     }
-
-    while (!isTransportEmpty(transports))
-    {
-        int deletedId = -1;
-        deleteFirstTransport(transports, deletedId);
-        removeAllRelationsToTransport(regions, deletedId);
-    }
-
-    while (!isRegionEmpty(regions))
-    {
-        int deletedId = -1;
-        deleteLastRegion(regions, deletedId);
-    }
-
-    return 0;
 }

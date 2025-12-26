@@ -2,13 +2,15 @@
 
 <img src="AboutImage.png" style="border-radius: 20px;">
 
+### Topik 8 -  Data Alat Transport
+
 Gerbangkertosusila Transport adalah project C++ berbasis Abstract Data Type (ADT) yang mengimplementasikan multi linked list dengan relasi M ke N.
 Project ini memodelkan hubungan antara alat transportasi darat dan daerah pada wilayah Gerbangkertosusila.
 
 ## Kontribusi
 
-Rovino Ramadhani (103072400031)
-Alif Rifqi Pratama (103072400133)
+- Rovino Ramadhani (103072400031)
+- Alif Rifqi Pratama (103072400133)
 
 ## 📌 Project Information
 
